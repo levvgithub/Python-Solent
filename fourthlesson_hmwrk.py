@@ -24,15 +24,44 @@ run()
 
 
 
-firstdic = {
-  "brand": "Apple",
-  "model": "iPhone",
-  "ram_capacity": "4GB",
-  "market_regions": "Russia",
-  "info_added_date": "11/11/2023"
-}
-print(firstdic["brand"])
-print(firstdic["model"])
-print(firstdic["ram_capacity"])
-print(firstdic["market_regions"])
-print(firstdic["info_added_date"])
+ def pattern():
+    sequences = {
+        "Short Sequence":3,
+        "Medium Sequence":2,
+        "Long Sequence":1
+    }
+    return sequences
+  def run():
+    run_seq = pattern()
+    print(run_seq)
+
+
+  if __name__ == "__main__":
+    run()
+  def display_keys():
+    keys_seq = pattern()
+    keysList = list(keys_seq.keys())
+    print("Keys:")
+    print(keysList[0])
+    print(keysList[1])
+    print(keysList[2])
+  display_keys()
+
+  def display_values():
+    values_seq = pattern()
+    valuesList = list(values_seq.values())
+    print("Values:")
+    print(valuesList[0])
+    print(valuesList[1])
+    print(valuesList[2])
+  display_values()
+    
+  def display_items():
+    items_seq = pattern()
+    keysList = list(items_seq.keys())
+    valuesList = list(items_seq.values())
+    print("Items:")
+    print(f"{keysList[0]}: {valuesList[0]}")
+    print(f"{keysList[1]}: {valuesList[1]}")
+    print(f"{keysList[2]}: {valuesList[2]}")
+  display_items()
