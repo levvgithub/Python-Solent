@@ -21,7 +21,7 @@ try:
         
         # Display a list of values for each line
         for row in csv_reader:
-            print(row)
+            print(row[0], row[3])
             
 except IOError:
     print("Cannot read file.")

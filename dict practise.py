@@ -54,12 +54,21 @@ selected_value = 'Apple'  # Change this to the name you're interested in
 # Read the CSV file and create a dictionary
 with open(csv_file_path, 'r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
+    apple_list = []
     for row in csv_reader:
         key = row[selected_key]
         if key == selected_value:
             # Print data for the specified key and value
-            print(f"{selected_key}: {key}, Data: {row}")
-            break 
+            # print(f"{selected_key}: {key}, Data: {row}")
+            apple_list.append(row)
+
+    # print(apple_list['brand'])
+    for row in apple_list:
+        # key = row[selected_key]
+        # if key == selected_value:
+        #     print(f"{selected_key}: {key}, Data: {}")
+        some_row = row[0]
+        print(some_row)
 
 
 
