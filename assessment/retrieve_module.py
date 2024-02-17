@@ -12,4 +12,11 @@ def retrieve(path, condition):
                 row_dict = {header[i]: row[i] for i in range(len(header))}
                 data_set.append(row_dict)
 
+    except FileNotFoundError:
+        print(f"Error: The file {path} was not found.")
+    except IOError:
+        print(f"Error: IO error occurred while opening {path} ")
+    except Exception as e:
+        print(f"Error: An unexpected error occurred: {e}")
+
 
