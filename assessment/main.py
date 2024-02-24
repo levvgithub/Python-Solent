@@ -81,10 +81,15 @@ import csv
 def menu_function():
     print("Press 1 to retrieve devices by oem_id")
 
-def retrieve1(dataset, value_field, value_id, print1_id, print2_id):
+def retrieve1(dataset, header, value_input, value_name, print_names):
+    value_id = header.index(value_name)
     for row in dataset:
-        if row[value_id] == value_field:
-            print(row[print1_id], row[print2_id])
+        if row[value_id] == value_input:
+            for name in print_names:
+                print(name, ':', row[header.index(name)])
+    # for row in dataset:
+    #     if row[value_id] == value_field:
+    #         print(', '.join(row[id] for id in print_ids))
 
 if __name__ == "__main__":
     file_name = "device_features.csv"
@@ -96,13 +101,25 @@ if __name__ == "__main__":
             OEM_ID_Column = header.index('oem_id')
             Model_Name_Column_ID = header.index('model')
             Manufacturer_Column_ID = header.index('manufacturer')
+            Weight_Column_ID = header.index('weight_gram')
+            Price_Column_ID = header.index('price')
+            Price_Currency_Column_ID = header.index('price_currency')
 
         choice = 0
         while choice != 13:
             menu_function()
             choice = int(input())
             if choice == 1:
-                oem_name = input("Enter oem_id: ")
-                retrieve1(dataset, oem_name, OEM_ID_Column, Model_Name_Column_ID, Manufacturer_Column_ID)
+                oem_input = input("Enter oem_id: ")
+                retrieve1(dataset, header, oem_input, 'oem_id',
+                          ['model', 'manufacturer',
+                           'weight_gram', 'price', 'price_currency'])
     except IOError:
         print("Cannot read file.")
+
+        # retrieve1(dataset, oem_name, OEM_ID_Column,
+        #           [Model_Name_Column_ID, Manufacturer_Column_ID,
+        #            Weight_Column_ID, Price_Column_ID, Price_Currency_Column_ID])
+
+
+
