@@ -80,16 +80,21 @@ import csv
 
 def menu_function():
     print("Press 1 to retrieve devices by oem_id")
+    print("Press 2 to retrieve devices by code name")
 
 def retrieve1(dataset, header, value_input, value_name, print_names):
-    value_id = header.index(value_name)
+    value_id = header.index(value_name)  # Get the index of the value name directly
     for row in dataset:
         if row[value_id] == value_input:
             for name in print_names:
                 print(name, ':', row[header.index(name)])
-    # for row in dataset:
-    #     if row[value_id] == value_field:
-    #         print(', '.join(row[id] for id in print_ids))
+
+def retrieve2(dataset, header, value_input, value_name, print_names):
+    value_id = header.index(value_name)  # Get the index of the value name directly
+    for row in dataset:
+        if row[value_id] == value_input:
+            for name in print_names:
+                print(name, ':', row[header.index(name)])
 
 if __name__ == "__main__":
     file_name = "device_features.csv"
@@ -104,6 +109,10 @@ if __name__ == "__main__":
             Weight_Column_ID = header.index('weight_gram')
             Price_Column_ID = header.index('price')
             Price_Currency_Column_ID = header.index('price_currency')
+            Brand_Column_ID = header.index('brand')
+            RAM_Capacity_Column_ID = header.index('ram_capacity')
+            Market_Regions_Column_ID = header.index('market_regions')
+            Date_Added_Column_ID = header.index('info_added_date')
 
         choice = 0
         while choice != 13:
@@ -112,10 +121,14 @@ if __name__ == "__main__":
             if choice == 1:
                 oem_input = input("Enter oem_id: ")
                 retrieve1(dataset, header, oem_input, 'oem_id',
-                          ['model', 'manufacturer',
-                           'weight_gram', 'price', 'price_currency'])
+                          ['model', 'manufacturer', 'weight_gram', 'price', 'price_currency'])
+            elif choice == 2:
+                code_input = input("Enter code name: ")
+                retrieve2(dataset, header, code_input, 'codename',
+                          ['brand', 'model', 'ram_capacity', 'market_regions', 'info_added_date'])
     except IOError:
         print("Cannot read file.")
+
 
         # retrieve1(dataset, oem_name, OEM_ID_Column,
         #           [Model_Name_Column_ID, Manufacturer_Column_ID,
