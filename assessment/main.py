@@ -77,10 +77,14 @@
 # #     print("Press 12 for the max price, weight and memory for two brands (custom)")
 
 import csv
+import pandas as pd
 
 def menu_function():
     print("Press 1 to retrieve devices by oem_id")
     print("Press 2 to retrieve devices by code name")
+    print("Press 3 to retrieve devices by RAM capacity")
+    print("Press 4 to retrieve devices by model (custom)")
+    print("Press 5 to identify the top 5 regions")
 
 def retrieve1(dataset, header, value_input, value_name, print_names):
     value_id = header.index(value_name)  # Get the index of the value name directly
@@ -96,9 +100,42 @@ def retrieve2(dataset, header, value_input, value_name, print_names):
             for name in print_names:
                 print(name, ':', row[header.index(name)])
 
+def retrieve3(dataset, header, value_input, value_name, print_names):
+    value_id = header.index(value_name)  # Get the index of the value name directly
+    for row in dataset:
+        if row[value_id] == value_input:
+            for name in print_names:
+                print(name, ':', row[header.index(name)])
+
+def retrieve4(dataset, header, value_input, value_name, print_names):
+    value_id = header.index(value_name)  # Get the index of the value name directly
+    for row in dataset:
+        if row[value_id] == value_input:
+            for name in print_names:
+                print(name, ':', row[header.index(name)])
+
+def retrieve_regions(df, brand_name):
+    brand_df = df[df['brand'] == brand_name]
+
+    # Split the 'market_regions' column by comma
+    split_regions = brand_df['market_regions'].str.split(',')
+
+    # Explode the resulting lists to separate rows
+    exploded_regions = split_regions.explode()
+
+    # Count occurrences of each region
+    region_counts = exploded_regions.value_counts()
+
+    # Select top 5 regions and return as a list
+    top_5_regions = region_counts.head(5).index.tolist()
+
+    return top_5_regions
+
 if __name__ == "__main__":
     file_name = "device_features.csv"
     try:
+        df = pd.read_csv(file_name)
+
         with open(file_name, encoding='UTF-8') as csv_file:
             csvreader = csv.reader(csv_file)
             dataset = list(csvreader)  # Load the entire CSV data into memory
@@ -126,6 +163,20 @@ if __name__ == "__main__":
                 code_input = input("Enter code name: ")
                 retrieve2(dataset, header, code_input, 'codename',
                           ['brand', 'model', 'ram_capacity', 'market_regions', 'info_added_date'])
+            elif choice == 3:
+                ram_input = input("Enter code name: ")
+                retrieve3(dataset, header, ram_input, 'ram_capacity',
+                          ['oem_id', 'release_date', 'announcement_date', 'dimensions', 'device_category'])
+            elif choice == 4:
+                model_input = input("Enter code name: ")
+                retrieve4(dataset, header, model_input, 'model',
+                          ['released_date', 'announced_date', 'hardware_designer'])
+            elif choice == 5:
+                brand_name = input("Enter brand name: ")
+                top_regions = retrieve_regions(df, brand_name)
+                print("Top 5 regions for brand '{}':".format(brand_name))
+                for i, region in enumerate(top_regions, start=1):
+                    print(i, region)
     except IOError:
         print("Cannot read file.")
 
