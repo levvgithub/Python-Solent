@@ -85,6 +85,10 @@ def menu_function():
     print("Press 3 to retrieve devices by RAM capacity")
     print("Press 4 to retrieve devices by model (custom)")
     print("Press 5 to identify the top 5 regions")
+    print("Press 6 to analyse the average price of devices")
+    print("Press 7 to analyse the average mass for each manufacturer")
+    print("Press 8 to analyse the average weight and height of devices (custom)")
+    print("Press 13 to exit")
 
 def retrieve1(dataset, header, value_input, value_name, print_names):
     value_id = header.index(value_name)  # Get the index of the value name directly
@@ -92,28 +96,6 @@ def retrieve1(dataset, header, value_input, value_name, print_names):
         if row[value_id] == value_input:
             for name in print_names:
                 print(name, ':', row[header.index(name)])
-
-def retrieve2(dataset, header, value_input, value_name, print_names):
-    value_id = header.index(value_name)  # Get the index of the value name directly
-    for row in dataset:
-        if row[value_id] == value_input:
-            for name in print_names:
-                print(name, ':', row[header.index(name)])
-
-def retrieve3(dataset, header, value_input, value_name, print_names):
-    value_id = header.index(value_name)  # Get the index of the value name directly
-    for row in dataset:
-        if row[value_id] == value_input:
-            for name in print_names:
-                print(name, ':', row[header.index(name)])
-
-def retrieve4(dataset, header, value_input, value_name, print_names):
-    value_id = header.index(value_name)  # Get the index of the value name directly
-    for row in dataset:
-        if row[value_id] == value_input:
-            for name in print_names:
-                print(name, ':', row[header.index(name)])
-
 def retrieve_regions(df, brand_name):
     brand_df = df[df['brand'] == brand_name]
 
@@ -130,6 +112,53 @@ def retrieve_regions(df, brand_name):
     top_5_regions = region_counts.head(5).index.tolist()
 
     return top_5_regions
+
+
+def average_price_for_brand(df, brand_name):
+    # Filter DataFrame for the specified brand
+    brand_df = df[df['brand'] == brand_name].copy()
+
+    # Convert price to numeric (assuming it's in string format)
+    brand_df['price'] = pd.to_numeric(brand_df['price'])
+
+    # Drop rows with NaN values in price column
+    brand_df = brand_df.dropna(subset=['price'])
+
+    # Calculate average price
+    average_price = brand_df['price'].mean()
+
+    return average_price
+
+
+def average_weight_by_manufacturer(df):
+    # Group the DataFrame by 'manufacturer'
+    grouped_by_manufacturer = df.groupby('manufacturer')
+
+    # Select the 'weight_gram' column from the grouped DataFrame
+    weight_column = grouped_by_manufacturer['weight_gram']
+
+    # Calculate the mean of the 'weight_gram' column
+    avg_weight_by_manufacturer = weight_column.mean()
+
+    return avg_weight_by_manufacturer
+
+
+def average_width_height_for_brand(df, brand_name):
+    # Filter DataFrame for the specified brand
+    brand_df = df[df['brand'] == brand_name].copy()
+
+    # Convert width and height to numeric (assuming they're in string format)
+    brand_df.loc[:, 'width'] = pd.to_numeric(brand_df['width'])
+    brand_df.loc[:, 'height'] = pd.to_numeric(brand_df['height'])
+
+    # Filter out rows with NaN values in width and height columns
+    brand_df = brand_df.dropna(subset=['width', 'height'])
+
+    # Calculate average width and height
+    avg_width = brand_df['width'].mean()
+    avg_height = brand_df['height'].mean()
+
+    return avg_width, avg_height
 
 if __name__ == "__main__":
     file_name = "device_features.csv"
@@ -161,15 +190,15 @@ if __name__ == "__main__":
                           ['model', 'manufacturer', 'weight_gram', 'price', 'price_currency'])
             elif choice == 2:
                 code_input = input("Enter code name: ")
-                retrieve2(dataset, header, code_input, 'codename',
+                retrieve1(dataset, header, code_input, 'codename',
                           ['brand', 'model', 'ram_capacity', 'market_regions', 'info_added_date'])
             elif choice == 3:
                 ram_input = input("Enter code name: ")
-                retrieve3(dataset, header, ram_input, 'ram_capacity',
+                retrieve1(dataset, header, ram_input, 'ram_capacity',
                           ['oem_id', 'release_date', 'announcement_date', 'dimensions', 'device_category'])
             elif choice == 4:
                 model_input = input("Enter code name: ")
-                retrieve4(dataset, header, model_input, 'model',
+                retrieve1(dataset, header, model_input, 'model',
                           ['released_date', 'announced_date', 'hardware_designer'])
             elif choice == 5:
                 brand_name = input("Enter brand name: ")
@@ -177,6 +206,20 @@ if __name__ == "__main__":
                 print("Top 5 regions for brand '{}':".format(brand_name))
                 for i, region in enumerate(top_regions, start=1):
                     print(i, region)
+            elif choice == 6:
+                brand_name = input("Enter brand name: ")
+                average_price = average_price_for_brand(df, brand_name)
+                print("Average price for devices of brand '{}': ${:.2f}".format(brand_name, average_price))
+            elif choice == 7:
+                avg_weight_by_manufacturer = average_weight_by_manufacturer(df)
+                # Display the list of average weights for all manufacturers
+                print("Average weight for each manufacturer:")
+                print(avg_weight_by_manufacturer.to_string(index=True, header=False))
+            elif choice == 8:
+                brand_name = input("Enter brand name: ")
+                avg_width, avg_height = average_width_height_for_brand(df, brand_name)
+                print("Average width for devices of brand '{}': {:.2f} cm".format(brand_name, avg_width))
+                print("Average height for devices of brand '{}': {:.2f} cm".format(brand_name, avg_height))
     except IOError:
         print("Cannot read file.")
 
