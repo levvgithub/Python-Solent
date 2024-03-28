@@ -174,20 +174,20 @@ if __name__ == "__main__":
         # brand_df.loc[:, 'width'] = pd.to_numeric(brand_df['width'])
         # brand_df.loc[:, 'height'] = pd.to_numeric(brand_df['height'])
         #
-        with open(file_name, encoding='UTF-8') as csv_file:
-            csvreader = csv.reader(csv_file)
-            dataset = list(csvreader)  # Load the entire CSV data into memory
-            header = dataset[0]  # Store header separately
-            OEM_ID_Column = header.index('oem_id')
-            Model_Name_Column_ID = header.index('model')
-            Manufacturer_Column_ID = header.index('manufacturer')
-            Weight_Column_ID = header.index('weight_gram')
-            Price_Column_ID = header.index('price')
-            Price_Currency_Column_ID = header.index('price_currency')
-            Brand_Column_ID = header.index('brand')
-            RAM_Capacity_Column_ID = header.index('ram_capacity')
-            Market_Regions_Column_ID = header.index('market_regions')
-            Date_Added_Column_ID = header.index('info_added_date')
+        # with open(file_name, encoding='UTF-8') as csv_file:
+        #     csvreader = csv.reader(csv_file)
+        #     dataset = list(csvreader)  # Load the entire CSV data into memory
+        #     header = dataset[0]  # Store header separately
+        #     OEM_ID_Column = header.index('oem_id')
+        #     Model_Name_Column_ID = header.index('model')
+        #     Manufacturer_Column_ID = header.index('manufacturer')
+        #     Weight_Column_ID = header.index('weight_gram')
+        #     Price_Column_ID = header.index('price')
+        #     Price_Currency_Column_ID = header.index('price_currency')
+        #     Brand_Column_ID = header.index('brand')
+        #     RAM_Capacity_Column_ID = header.index('ram_capacity')
+        #     Market_Regions_Column_ID = header.index('market_regions')
+        #     Date_Added_Column_ID = header.index('info_added_date')
 
         choice = 0
         while choice != 13:
